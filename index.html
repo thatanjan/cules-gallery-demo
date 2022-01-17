@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title></title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<style>
+			* {
+				box-sizing: border-box;
+				padding: 0;
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="grid"></div>
+
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"
+			integrity="sha512-u9akINsQsAkG9xjc1cnGF4zw5TFDwkxuc9vUp5dltDWYCSmyd0meygbvgXrlc/z7/o4a19Fb5V0OUE58J7dcyw=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		></script>
+		<script src="https://cdn.jsdelivr.net/npm/macy@2"></script>
+		<script>
+			var macyInstance = Macy({
+				// See below for all available options.
+				container: '.grid',
+				waitForImages: true,
+				breakAt: {
+					1200: 5,
+					940: 3,
+					520: 2,
+					400: 1,
+				},
+			})
+
+			const key = 'gpWLYxQhjlUWiFXdvXnToSn0J7j3kU9LJqrs44UXots'
+			;(async () => {
+				let { data: images } = await axios.get(
+					`https://api.unsplash.com/photos/?client_id=${key}`
+				)
+
+				images = images.map(image => image.urls.regular)
+
+				const grid = document.querySelector('.grid')
+
+				images.forEach(image => {
+					const img = document.createElement('img')
+					img.src = image
+					grid.append(img)
+				})
+			})()
+
+			macyInstance.runOnImageLoad(function () {
+				macyInstance.recalculate(true)
+			}, true)
+		</script>
+	</body>
+</html>
